@@ -3,7 +3,7 @@ name: CI on Develop
 on:
   push:
     branches:
-      - develop
+      - develope
 
 
 jobs:
@@ -21,13 +21,3 @@ jobs:
 
       - name: Build
         run: echo "Building..."
-
-      - name: Create PR to main
-        if: success()
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          base: main
-          branch: develop
-          title: "Auto PR: develop → main"
-          body: "Automated PR after successful CI."
