@@ -1,33 +1,32 @@
-name: CI on Develop
+name: Feature Branch Validation
 
 on:
   push:
     branches:
-      - develop
+      - "develope/**"
 
+permissions:
+  contents: read
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: echo "Installing..."
-
-      - name: Run tests
-        run: echo "Running tests..."
-
-      - name: Build
-        run: echo "Building..."
-
-      - name: Create PR to main
-        if: success()
-        uses: peter-evans/create-pull-request@v6
+      - uses: actions/setup-node@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          base: main
-          branch: develop
-          title: "Auto PR: develop → main"
-          body: "Automated PR after successful CI."
+          node-version: 18
+          cache: npm
+
+      - run: npm ci
+
+      - name: Unit Tests
+        run: npm test -- --coverage
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Dependency Audit
+        run: npm audit --audit-level=high
