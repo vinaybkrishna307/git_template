@@ -1,23 +1,32 @@
-name: CI on Develop
+name: Feature Branch Validation
 
 on:
   push:
     branches:
-      - develope
+      - "develope/**"
 
+permissions:
+  contents: read
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: echo "Installing..."
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
 
-      - name: Run tests
-        run: echo "Running tests..."
+      - run: npm ci
 
-      - name: Build
-        run: echo "Building..."
+      - name: Unit Tests
+        run: npm test -- --coverage
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Dependency Audit
+        run: npm audit --audit-level=high
