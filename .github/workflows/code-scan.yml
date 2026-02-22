@@ -1,0 +1,31 @@
+name: CodeQL Scan
+
+on: workflow_dispatch
+
+jobs:
+  codeql:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: javascript
+#          languages: javascript,python,java,go
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
+
+      - name: Run CodeQL
+        uses: github/codeql-action/analyze@v2
+
+#Results show in the Security tab and as PR checks.
+#If you want CodeQL to fail PRs on certain categories, configure GitHub repository security settings accordingly.

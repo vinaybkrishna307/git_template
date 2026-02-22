@@ -1,0 +1,30 @@
+name: Deploy-Production
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+
+    steps:
+      - name: Approval Gate
+        run: echo "Manual approval required"
+
+      - name: Canary Deployment
+        run: |
+          echo "Deploy 10% traffic first"
+
+      - name: Health Check
+        run: |
+          echo "Validate production metrics"
+
+      - name: Rollback Logic
+        run: |
+          echo "If failure, redeploy previous artifact"
