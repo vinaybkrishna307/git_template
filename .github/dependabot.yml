@@ -1,0 +1,22 @@
+version: 2
+updates:
+  # Keep application dependencies patched
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "security"
+
+  # Keep the CI/CD pipeline itself patched — workflow actions are part of the
+  # supply chain too (e.g. pinning to @v4 doesn't protect against a compromised
+  # upstream action; Dependabot flags new releases so they can be reviewed).
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "ci"
+      - "security"
